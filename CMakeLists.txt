@@ -39,12 +39,12 @@ if (BUILD_EXAMPLE)
 endif (BUILD_EXAMPLE)
 
 
-install(FILES include/aixlog.hpp DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(FILES include/aixlog.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 
 FIND_PROGRAM(CLANG_FORMAT "clang-format")
 IF(CLANG_FORMAT)
 	set(CHECK_CXX_SOURCE_FILES
-	${CMAKE_SOURCE_DIR}/include/aixlog.hpp
+	${CMAKE_SOURCE_DIR}/include/aixlog.h
 	${CMAKE_SOURCE_DIR}/aixlog_example.cpp
 	)
 

@@ -12,7 +12,7 @@
 ***/
 
 
-#include "aixlog.hpp"
+#include "aixlog.h"
 
 using namespace std;
 
