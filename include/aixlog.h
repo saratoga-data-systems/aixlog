@@ -454,11 +454,11 @@ private:
  */
 struct Metadata
 {
-    Metadata() : severity(Severity::trace), tag(nullptr), function(nullptr), timestamp(nullptr)
+    Metadata() : tag(nullptr), function(nullptr), timestamp(nullptr)
     {
     }
 
-    Severity severity;
+    Severity severity{Severity::trace};
     Tag tag;
     Function function;
     Timestamp timestamp;
@@ -604,7 +604,7 @@ public:
     }
 
 protected:
-    Log() noexcept : last_buffer_(nullptr), do_log_(true)
+    Log() noexcept
     {
         std::clog.rdbuf(this);
         std::clog << Severity() << Tag() << Function() << Conditional() << AixLog::Color::NONE << std::flush;
@@ -677,7 +677,7 @@ private:
     /// the last buffer
     std::stringstream* last_buffer_ = nullptr;
     Metadata metadata_;
-    bool do_log_;
+    bool do_log_{true};
     std::vector<log_sink_ptr> log_sinks_;
     std::recursive_mutex mutex_;
 };

@@ -17,7 +17,7 @@ set(PROJECT_URL "https://github.com/badaix/aixlog")
 
 option(BUILD_EXAMPLE "Build example (build aixlog_example demo)" ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
