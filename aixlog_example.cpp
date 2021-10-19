@@ -80,10 +80,14 @@ int main(int /*argc*/, char** /*argv*/)
                            cout << "Callback:\n\tmsg:   " << message << "\n\ttag:   " << metadata.tag.text
                                 << "\n\tsever: " << AixLog::to_string(metadata.severity) << " (" << static_cast<int>(metadata.severity) << ")\n";
                            if (metadata.timestamp)
+                           {
                                cout << "\ttime:  " << metadata.timestamp.to_string() << "\n";
+                           }
                            if (metadata.function)
+                           {
                                cout << "\tfunc:  " << metadata.function.name << "\n\tline:  " << metadata.function.line
                                     << "\n\tfile:  " << metadata.function.file << "\n";
+                           }
                        })});
 
 #ifdef WIN32

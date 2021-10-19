@@ -180,8 +180,10 @@ static Severity to_severity(std::string severity, Severity def = Severity::info)
 {
     std::transform(severity.begin(), severity.end(), severity.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
     if (severity == "trace")
+    {
         return Severity::trace;
-    else if (severity == "debug")
+    }
+    if (severity == "debug")
         return Severity::debug;
     else if (severity == "info")
         return Severity::info;
@@ -341,7 +343,9 @@ struct Timestamp
             int ms_part = std::chrono::time_point_cast<std::chrono::milliseconds>(time_point).time_since_epoch().count() % 1000;
             char ms_str[4];
             if (snprintf(ms_str, 4, "%03d", ms_part) >= 0)
+            {
                 result.replace(pos, 3, ms_str);
+            }
         }
         return result;
     }
@@ -351,7 +355,7 @@ struct Timestamp
 private:
     bool is_null_;
 
-    [[nodiscard]] inline std::tm localtime_xp(std::time_t timer) const
+    [[nodiscard]] static inline std::tm localtime_xp(std::time_t timer)
     {
         std::tm bt;
 #if defined(__unix__)
@@ -373,7 +377,7 @@ private:
  */
 struct Tag
 {
-    Tag(std::nullptr_t) : text(""), is_null_(true)
+    Tag(std::nullptr_t) : is_null_(true)
     {
     }
 
@@ -425,7 +429,7 @@ struct Function
     {
     }
 
-    Function(std::nullptr_t) : name(""), file(""), line(0), is_null_(true)
+    Function(std::nullptr_t) : line(0), is_null_(true)
     {
     }
 
@@ -480,15 +484,21 @@ public:
     [[nodiscard]] bool match(const Metadata& metadata) const
     {
         if (tag_filter_.empty())
+        {
             return true;
+        }
 
         auto iter = tag_filter_.find(metadata.tag);
         if (iter != tag_filter_.end())
+        {
             return (metadata.severity >= iter->second);
+        }
 
         iter = tag_filter_.find("*");
         if (iter != tag_filter_.end())
+        {
             return (metadata.severity >= iter->second);
+        }
 
         return false;
     }
@@ -507,9 +517,13 @@ public:
     {
         auto pos = filter.find(":");
         if (pos != std::string::npos)
+        {
             add_filter(filter.substr(0, pos), to_severity(filter.substr(pos + 1)));
+        }
         else
+        {
             add_filter(to_severity(filter));
+        }
     }
 
 private:
@@ -570,7 +584,9 @@ public:
         Log::instance().log_sinks_.clear();
 
         for (const auto& sink : log_sinks)
+        {
             Log::instance().add_logsink(sink);
+        }
     }
 
     template <typename T, typename... Ts>
@@ -625,7 +641,9 @@ protected:
                 for (const auto& sink : log_sinks_)
                 {
                     if (sink->filter.match(metadata_))
+                    {
                         sink->log(metadata_, get_stream().str());
+                    }
                 }
             }
             get_stream().str("");
@@ -641,9 +659,13 @@ protected:
         if (c != EOF)
         {
             if (c == '\n')
+            {
                 sync();
+            }
             else if (do_log_)
+            {
                 get_stream() << static_cast<char>(c);
+            }
         }
         else
         {
@@ -732,11 +754,15 @@ protected:
     {
         std::string result = format_;
         if (metadata.timestamp)
+        {
             result = metadata.timestamp.to_string(result);
+        }
 
         size_t pos = result.find("#severity");
         if (pos != std::string::npos)
+        {
             result.replace(pos, 9, to_string(metadata.severity));
+        }
 
         pos = result.find("#color_severity");
         if (pos != std::string::npos)
@@ -748,15 +774,21 @@ protected:
 
         pos = result.find("#tag_func");
         if (pos != std::string::npos)
+        {
             result.replace(pos, 9, metadata.tag ? metadata.tag.text : (metadata.function ? metadata.function.name : "log"));
+        }
 
         pos = result.find("#tag");
         if (pos != std::string::npos)
+        {
             result.replace(pos, 4, metadata.tag ? metadata.tag.text : "");
+        }
 
         pos = result.find("#function");
         if (pos != std::string::npos)
+        {
             result.replace(pos, 9, metadata.function ? metadata.function.name : "");
+        }
 
         pos = result.find("#message");
         if (pos != std::string::npos)
@@ -767,9 +799,13 @@ protected:
         else
         {
             if (result.empty() || (result.back() == ' '))
+            {
                 stream << result << message << std::endl;
+            }
             else
+            {
                 stream << result << " " << message << std::endl;
+            }
         }
     }
 
@@ -916,7 +952,7 @@ struct SinkSyslog : public Sink
         closelog();
     }
 
-    [[nodiscard]] int get_syslog_priority(Severity severity) const
+    [[nodiscard]] static int get_syslog_priority(Severity severity)
     {
         // http://unix.superglobalmegacorp.com/Net2/newsrc/sys/syslog.h.html
         switch (severity)
@@ -1096,7 +1132,9 @@ struct SinkNative : public Sink
     void log(const Metadata& metadata, const std::string& message) override
     {
         if (log_sink_ != nullptr)
+        {
             log_sink_->log(metadata, message);
+        }
     }
 
 protected:
@@ -1123,7 +1161,9 @@ struct SinkCallback : public Sink
     void log(const Metadata& metadata, const std::string& message) override
     {
         if (callback_)
+        {
             callback_(metadata, message);
+        }
     }
 
 private:
@@ -1219,16 +1259,22 @@ static std::ostream& operator<<(std::ostream& os, const TextColor& text_color)
 {
     os << "\033[";
     if ((text_color.foreground == Color::none) && (text_color.background == Color::none))
+    {
         os << "0"; // reset colors if no params
+    }
 
     if (text_color.foreground != Color::none)
     {
         os << 29 + static_cast<int>(text_color.foreground);
         if (text_color.background != Color::none)
+        {
             os << ";";
+        }
     }
     if (text_color.background != Color::none)
+    {
         os << 39 + static_cast<int>(text_color.background);
+    }
     os << "m";
 
     return os;
