@@ -285,7 +285,7 @@ struct Conditional
 
     virtual ~Conditional() = default;
 
-    virtual bool is_true() const
+    [[nodiscard]] virtual bool is_true() const
     {
         return func_();
     }
@@ -328,7 +328,7 @@ struct Timestamp
     }
 
     /// strftime format + proprietary "#ms" for milliseconds
-    std::string to_string(const std::string& format = "%Y-%m-%d %H-%M-%S.#ms") const
+    [[nodiscard]] std::string to_string(const std::string& format = "%Y-%m-%d %H-%M-%S.#ms") const
     {
         std::time_t now_c = std::chrono::system_clock::to_time_t(time_point);
         struct ::tm now_tm = localtime_xp(now_c);
@@ -351,7 +351,7 @@ struct Timestamp
 private:
     bool is_null_;
 
-    inline std::tm localtime_xp(std::time_t timer) const
+    [[nodiscard]] inline std::tm localtime_xp(std::time_t timer) const
     {
         std::tm bt;
 #if defined(__unix__)
@@ -477,7 +477,7 @@ public:
         add_filter(severity);
     }
 
-    bool match(const Metadata& metadata) const
+    [[nodiscard]] bool match(const Metadata& metadata) const
     {
         if (tag_filter_.empty())
             return true;
@@ -916,7 +916,7 @@ struct SinkSyslog : public Sink
         closelog();
     }
 
-    int get_syslog_priority(Severity severity) const
+    [[nodiscard]] int get_syslog_priority(Severity severity) const
     {
         // http://unix.superglobalmegacorp.com/Net2/newsrc/sys/syslog.h.html
         switch (severity)
