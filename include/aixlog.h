@@ -184,19 +184,33 @@ static Severity to_severity(std::string severity, Severity def = Severity::info)
         return Severity::trace;
     }
     if (severity == "debug")
+    {
         return Severity::debug;
+    }
     else if (severity == "info")
+    {
         return Severity::info;
+    }
     else if (severity == "notice")
+    {
         return Severity::notice;
+    }
     else if (severity == "warning")
+    {
         return Severity::warning;
+    }
     else if (severity == "error")
+    {
         return Severity::error;
+    }
     else if (severity == "fatal")
+    {
         return Severity::fatal;
+    }
     else
+    {
         return def;
+    }
 }
 
 
