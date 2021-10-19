@@ -340,7 +340,7 @@ struct Timestamp
         size_t pos = result.find("#ms");
         if (pos != std::string::npos)
         {
-            int ms_part = std::chrono::time_point_cast<std::chrono::milliseconds>(time_point).time_since_epoch().count() % 1000;
+            int ms_part = static_cast<int>(std::chrono::time_point_cast<std::chrono::milliseconds>(time_point).time_since_epoch().count() % 1000);
             char ms_str[4];
             if (snprintf(ms_str, 4, "%03d", ms_part) >= 0)
             {
@@ -357,7 +357,7 @@ private:
 
     [[nodiscard]] static inline std::tm localtime_xp(std::time_t timer)
     {
-        std::tm bt;
+        std::tm bt{};
 #if defined(__unix__)
         localtime_r(&timer, &bt);
 #elif defined(_MSC_VER)
