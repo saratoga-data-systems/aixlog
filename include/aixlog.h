@@ -610,7 +610,7 @@ protected:
         std::clog << Severity() << Tag() << Function() << Conditional() << AixLog::Color::NONE << std::flush;
     }
 
-    virtual ~Log()
+    ~Log() override
     {
         sync();
     }
