@@ -1,4 +1,4 @@
-/***
+x/***
       __   __  _  _  __     __    ___
      / _\ (  )( \/ )(  )   /  \  / __)
     /    \ )(  )  ( / (_/\(  O )( (_ \
@@ -271,7 +271,7 @@ enum class Color
  */
 struct TextColor
 {
-    TextColor(Color foreground = Color::none, Color background = Color::none) : foreground(foreground), background(background)
+    TextColor(Color xforeground = Color::none, Color xbackground = Color::none) : foreground(xforeground), background(xbackground)
     {
     }
 
@@ -328,11 +328,11 @@ struct Timestamp
     {
     }
 
-    Timestamp(const time_point_sys_clock& time_point) : time_point(time_point), is_null_(false)
+    Timestamp(const time_point_sys_clock& xtime_point) : time_point(xtime_point), is_null_(false)
     {
     }
 
-    Timestamp(time_point_sys_clock&& time_point) : time_point(std::move(time_point)), is_null_(false)
+    Timestamp(time_point_sys_clock&& xtime_point) : time_point(std::move(xtime_point)), is_null_(false)
     {
     }
 
@@ -399,15 +399,15 @@ struct Tag
     {
     }
 
-    Tag(const char* text) : text(text), is_null_(false)
+    Tag(const char* xtext) : text(xtext), is_null_(false)
     {
     }
 
-    Tag(const std::string& text) : text(text), is_null_(false)
+    Tag(const std::string& xtext) : text(xtext), is_null_(false)
     {
     }
 
-    Tag(std::string&& text) : text(std::move(text)), is_null_(false)
+    Tag(std::string&& xtext) : text(std::move(xtext)), is_null_(false)
     {
     }
 
@@ -435,11 +435,11 @@ private:
  */
 struct Function
 {
-    Function(const std::string& name, const std::string& file, size_t line) : name(name), file(file), line(line), is_null_(false)
+    Function(const std::string& xname, const std::string& xfile, size_t xline) : name(xname), file(xfile), line(xline), is_null_(false)
     {
     }
 
-    Function(std::string&& name, std::string&& file, size_t line) : name(std::move(name)), file(std::move(file)), line(line), is_null_(false)
+    Function(std::string&& xname, std::string&& xfile, size_t xline) : name(std::move(xname)), file(std::move(xfile)), line(xline), is_null_(false)
     {
     }
 
@@ -553,7 +553,7 @@ private:
  */
 struct Sink
 {
-    Sink(const Filter& filter) : filter(filter)
+    Sink(const Filter& xfilter) : filter(xfilter)
     {
     }
 
@@ -752,7 +752,7 @@ struct SinkNull : public Sink
  */
 struct SinkFormat : public Sink
 {
-    SinkFormat(const Filter& filter, const std::string& format) : Sink(filter), format_(format)
+    SinkFormat(const Filter& xfilter, const std::string& format) : Sink(xfilter), format_(format)
     {
     }
 
@@ -832,7 +832,7 @@ protected:
  */
 struct SinkCout : public SinkFormat
 {
-    SinkCout(const Filter& filter, const std::string& format = "%Y-%m-%d %H-%M-%S.#ms [#severity] (#tag_func)") : SinkFormat(filter, format)
+    SinkCout(const Filter& xfilter, const std::string& format = "%Y-%m-%d %H-%M-%S.#ms [#severity] (#tag_func)") : SinkFormat(xfilter, format)
     {
     }
 
@@ -848,7 +848,7 @@ struct SinkCout : public SinkFormat
  */
 struct SinkCerr : public SinkFormat
 {
-    SinkCerr(const Filter& filter, const std::string& format = "%Y-%m-%d %H-%M-%S.#ms [#severity] (#tag_func)") : SinkFormat(filter, format)
+    SinkCerr(const Filter& xfilter, const std::string& format = "%Y-%m-%d %H-%M-%S.#ms [#severity] (#tag_func)") : SinkFormat(xfilter, format)
     {
     }
 
@@ -864,8 +864,8 @@ struct SinkCerr : public SinkFormat
  */
 struct SinkFile : public SinkFormat
 {
-    SinkFile(const Filter& filter, const std::string& filename, const std::string& format = "%Y-%m-%d %H-%M-%S.#ms [#severity] (#tag_func)")
-        : SinkFormat(filter, format)
+    SinkFile(const Filter& xfilter, const std::string& filename, const std::string& format = "%Y-%m-%d %H-%M-%S.#ms [#severity] (#tag_func)")
+        : SinkFormat(xfilter, format)
     {
         ofs.open(filename.c_str(), std::ofstream::out | std::ofstream::trunc);
     }
@@ -893,7 +893,7 @@ protected:
  */
 struct SinkOutputDebugString : public Sink
 {
-    SinkOutputDebugString(const Filter& filter) : Sink(filter)
+    SinkOutputDebugString(const Filter& xfilter) : Sink(xfilter)
     {
     }
 
@@ -916,7 +916,7 @@ struct SinkOutputDebugString : public Sink
  */
 struct SinkUnifiedLogging : public Sink
 {
-    SinkUnifiedLogging(const Filter& filter) : Sink(filter)
+    SinkUnifiedLogging(const Filter& xfilter) : Sink(xfilter)
     {
     }
 
@@ -956,7 +956,7 @@ struct SinkUnifiedLogging : public Sink
  */
 struct SinkSyslog : public Sink
 {
-    SinkSyslog(const char* ident, const Filter& filter) : Sink(filter)
+    SinkSyslog(const char* ident, const Filter& xfilter) : Sink(xfilter)
     {
         openlog(ident, LOG_PID, LOG_USER);
     }
@@ -1005,7 +1005,7 @@ struct SinkSyslog : public Sink
  */
 struct SinkAndroid : public Sink
 {
-    SinkAndroid(const std::string& ident, const Filter& filter) : Sink(filter), ident_(ident)
+    SinkAndroid(const std::string& ident, const Filter& xfilter) : Sink(xfilter), ident_(ident)
     {
     }
 
@@ -1062,7 +1062,7 @@ protected:
  */
 struct SinkEventLog : public Sink
 {
-    SinkEventLog(const std::string& ident, const Filter& filter) : Sink(filter)
+    SinkEventLog(const std::string& ident, const Filter& xfilter) : Sink(xfilter)
     {
 #ifdef UNICODE
         std::wstring wide = std::wstring(ident.begin(), ident.end()); // stijnvdb: RegisterEventSource expands to RegisterEventSourceW which takes wchar_t
@@ -1122,16 +1122,16 @@ protected:
  */
 struct SinkNative : public Sink
 {
-    SinkNative(const std::string& ident, const Filter& filter) : Sink(filter), log_sink_(nullptr), ident_(ident)
+    SinkNative(const std::string& ident, const Filter& xfilter) : Sink(xfilter), log_sink_(nullptr), ident_(ident)
     {
 #ifdef __ANDROID__
-        log_sink_ = std::make_shared<SinkAndroid>(ident_, filter);
+        log_sink_ = std::make_shared<SinkAndroid>(ident_, xfilter);
 #elif HAS_APPLE_UNIFIED_LOG_
-        log_sink_ = std::make_shared<SinkUnifiedLogging>(filter);
+        log_sink_ = std::make_shared<SinkUnifiedLogging>(xfilter);
 #elif _WIN32
-        log_sink_ = std::make_shared<SinkEventLog>(ident, filter);
+        log_sink_ = std::make_shared<SinkEventLog>(ident, xfilter);
 #elif HAS_SYSLOG_
-        log_sink_ = std::make_shared<SinkSyslog>(ident_.c_str(), filter);
+        log_sink_ = std::make_shared<SinkSyslog>(ident_.c_str(), xfilter);
 #else
         /// will not throw or something. Use "get_logger()" to check for success
         log_sink_ = nullptr;
@@ -1168,7 +1168,7 @@ struct SinkCallback : public Sink
 {
     using callback_fun = std::function<void(const Metadata& metadata, const std::string& message)>;
 
-    SinkCallback(const Filter& filter, callback_fun callback) : Sink(filter), callback_(callback)
+    SinkCallback(const Filter& xfilter, callback_fun callback) : Sink(xfilter), callback_(callback)
     {
     }
 
